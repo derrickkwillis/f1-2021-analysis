@@ -99,7 +99,11 @@ JOIN results AS r
 JOIN constructors AS c
     ON r.constructorid = c.constructorid;
 
-/*Teammate comparison*/
+/*
+Teammate comparison
+- if cv_diff is positive, it means the first driver is more consistent (remember a smaller lap_cv is better)
+- if cv_diff is negative, it means the second driver is more conistent
+*/
 
 SELECT 
     dc1.name AS race,
@@ -107,11 +111,11 @@ SELECT
     dc1.avg_lap_time_ms AS driver1_avg_lap_ms,
     dc1.lap_stddev_ms AS driver1_avg_stddev_ms,
     dc1.lap_cv AS driver1_lap_cv,
-    dc2.name AS race,
     dc2.surname AS driver2_name, 
     dc2.avg_lap_time_ms AS driver2_avg_lap_ms,
     dc2.lap_stddev_ms AS driver2_avg_stddev_ms,
-    dc2.lap_cv AS driver2_lap_cv
+    dc2.lap_cv AS driver2_lap_cv,
+    dc2.lap_cv - dc1.lap_cv AS cv_diff
 FROM driver_consistency_with_constructor_2021 dc1 
     INNER JOIN driver_consistency_with_constructor_2021 dc2
     ON dc1.raceid = dc2.raceid
